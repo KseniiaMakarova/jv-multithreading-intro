@@ -1,9 +1,13 @@
 public class Main {
-    public static void main(String[] args) {
-        RunnableDemo thread1 = new RunnableDemo("Runnable");
-        thread1.start();
-
-        ThreadDemo thread2 = new ThreadDemo("Thread");
-        thread2.start();
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        Thread firstThread = new ThreadDemo("Thread", counter);
+        Thread secondThread = new Thread(new RunnableDemo("Runnable", counter));
+        firstThread.start();
+        secondThread.start();
+        firstThread.join();
+        secondThread.join();
+        System.out.println("Returning to main thread");
+        System.out.println("Value: " + counter.getValue());
     }
 }
