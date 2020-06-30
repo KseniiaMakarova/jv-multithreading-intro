@@ -1,8 +1,11 @@
-public class ThreadDemo extends Thread {
-    private final String threadName;
-    private final Counter counter;
+import java.util.concurrent.atomic.AtomicInteger;
 
-    public ThreadDemo(String threadName, Counter counter) {
+public class ThreadDemo extends Thread {
+    private static final int UPPER_BOUND = 100;
+    private final String threadName;
+    private final AtomicInteger counter;
+
+    public ThreadDemo(String threadName, AtomicInteger counter) {
         this.threadName = threadName;
         this.counter = counter;
         System.out.println("Creating " + threadName);
@@ -13,11 +16,10 @@ public class ThreadDemo extends Thread {
         System.out.println("Running " + threadName);
         while (true) {
             synchronized (counter) {
-                if (counter.getValue() >= Counter.UPPER_BOUND) {
+                if (counter.get() >= UPPER_BOUND) {
                     break;
                 }
-                System.out.println(threadName + ": " + counter.getValue());
-                counter.increment();
+                System.out.println(threadName + ": " + counter.getAndIncrement());
             }
             try {
                 Thread.sleep(1);

@@ -1,8 +1,11 @@
-public class RunnableDemo implements Runnable {
-    private final String threadName;
-    private final Counter counter;
+import java.util.concurrent.atomic.AtomicInteger;
 
-    public RunnableDemo(String threadName, Counter counter) {
+public class RunnableDemo implements Runnable {
+    private static final int UPPER_BOUND = 100;
+    private final String threadName;
+    private final AtomicInteger counter;
+
+    public RunnableDemo(String threadName, AtomicInteger counter) {
         this.threadName = threadName;
         this.counter = counter;
         System.out.println("Creating " + threadName);
@@ -13,11 +16,10 @@ public class RunnableDemo implements Runnable {
         System.out.println("Running " + threadName);
         while (true) {
             synchronized (counter) {
-                if (counter.getValue() >= Counter.UPPER_BOUND) {
+                if (counter.get() >= UPPER_BOUND) {
                     break;
                 }
-                System.out.println(threadName + ": " + counter.getValue());
-                counter.increment();
+                System.out.println(threadName + ": " + counter.getAndIncrement());
             }
             try {
                 Thread.sleep(1);
