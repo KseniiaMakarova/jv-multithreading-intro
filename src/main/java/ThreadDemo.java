@@ -14,13 +14,8 @@ public class ThreadDemo extends Thread {
     @Override
     public void run() {
         System.out.println("Running " + threadName);
-        while (true) {
-            synchronized (counter) {
-                if (counter.get() >= UPPER_BOUND) {
-                    break;
-                }
-                System.out.println(threadName + ": " + counter.getAndIncrement());
-            }
+        while (counter.get() < UPPER_BOUND) {
+            System.out.println(threadName + ": " + counter.getAndIncrement());
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {
